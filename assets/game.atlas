@@ -1,0 +1,7 @@
+images {
+  image: "/assets/planet.png"
+}
+images {
+  image: "/assets/sattelite.png"
+}
+extrude_borders: 2
