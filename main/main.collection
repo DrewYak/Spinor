@@ -71,7 +71,11 @@ embedded_instances {
 }
 embedded_instances {
   id: "spawner"
-  data: "embedded_components {\n"
+  data: "components {\n"
+  "  id: \"spawner\"\n"
+  "  component: \"/main/spawner.script\"\n"
+  "}\n"
+  "embedded_components {\n"
   "  id: \"factory\"\n"
   "  type: \"factory\"\n"
   "  data: \"prototype: \\\"/main/energy_capsule.go\\\"\\n"
