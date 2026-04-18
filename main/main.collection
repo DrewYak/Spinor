@@ -46,3 +46,17 @@ embedded_instances {
     y: 640.0
   }
 }
+embedded_instances {
+  id: "spawner"
+  data: "embedded_components {\n"
+  "  id: \"factory\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/main/energy_capsule.go\\\"\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    x: 360.0
+    y: 640.0
+  }
+}

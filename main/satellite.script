@@ -1,32 +1,34 @@
+local C = require "main.constants"
+
+-- Скорость тоже можно вынести в константы, но пока оставим тут как настройку скрипта
 local SPEED = 3
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
 
-	self.center = vmath.vector3(360, 640, 0)
 	self.angle = 0
-	self.radius = 200
 	self.direction = 1
 
-	-- НОВАЯ ЛОГИКА ЭНЕРГИИ И СОСТОЯНИЯ
-	self.energy_tank_a = 20      -- Бак А: Жизнеобеспечение (Max 300)
+	-- Использование единообразных названий баков
+	self.energy_tank_a = 60      -- Бак А: Жизнеобеспечение (Max 300)
 	self.energy_tank_b = 0       -- Бак Б: Строительство дронов
-	self.lives = 3              -- Жизни
-	self.shields = 0            -- Слои щита
+	self.lives = 3
+	self.shields = 0
 
-	self.timer = 0              -- Внутренний счетчик для отсчета секунды
+	self.timer = 0
 end
 
 function update(self, dt)
-	-- 1. Движение спутника (уже знакомо)
+	-- 1. Движение спутника
+	-- Используем C.CENTER и C.ORBIT_RADIUS из модуля констант
 	self.angle = self.angle + SPEED * dt * self.direction
-	local x = self.center.x + math.cos(self.angle) * self.radius
-	local y = self.center.y + math.sin(self.angle) * self.radius
+	local x = C.CENTER.x + math.cos(self.angle) * C.ORBIT_RADIUS
+	local y = C.CENTER.y + math.sin(self.angle) * C.ORBIT_RADIUS
 	go.set_position(vmath.vector3(x, y, 0))
 
 	-- 2. Логика расхода энергии
 	self.timer = self.timer + dt
-	if self.timer >= 1 then
+	while self.timer >= 1 do
 		self.timer = self.timer - 1
 		self.energy_tank_a = self.energy_tank_a - 1
 
@@ -38,18 +40,22 @@ function update(self, dt)
 				self.energy_tank_a = self.energy_tank_a + refill
 				print("Refilled Tank A from Tank B!")
 			else
+				-- Здесь позже добавим логику падения по спирали
 				print("CRITICAL: All tanks empty!")
 			end
 		end
 
-		-- Вывод в консоль
+		-- Вывод состояния в консоль
 		print(string.format("Tank A: %d | Tank B: %d", self.energy_tank_a, self.energy_tank_b))
 	end
 end
 
 function on_input(self, action_id, action)
-	-- Если нажали "touch" (клик или пробел)
 	if action_id == hash("touch") and action.pressed then
 		self.direction = self.direction * -1
+
+		-- ВРЕМЕННО: Создаем капсулу в центре для теста
+		-- Фабрика сама создаст объект в C.CENTER, если он там стоит в коллекции
+		factory.create("/spawner#factory")
 	end
 end

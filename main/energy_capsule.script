@@ -1,0 +1,36 @@
+local C = require "main.constants"
+
+go.property("amount", 0) 
+
+function init(self)
+	if self.amount == 0 then
+		-- Используем шаг 100 для случайного значения
+		self.amount = math.random(1, 10) * 100
+	end
+	self.timer = 0
+
+	-- ЛОГИКА ВЫЛЕТА НА ОРБИТУ
+	-- 1. Выбираем случайный угол
+	local angle = math.random() * math.pi * 2
+
+	-- 2. Целевая точка: используем C.CENTER и C.ORBIT_RADIUS
+	local target_x = C.CENTER.x + math.cos(angle) * C.ORBIT_RADIUS
+	local target_y = C.CENTER.y + math.sin(angle) * C.ORBIT_RADIUS
+	local target_pos = vmath.vector3(target_x, target_y, 0)
+
+	-- 3. Анимация: летим из центра C.CENTER в целевую точку
+	go.set_position(C.CENTER)
+	go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, target_pos, go.EASING_OUTBACK, 1.5)
+end
+
+function update(self, dt)
+	self.timer = self.timer + dt
+	if self.timer >= 1 then
+		self.timer = self.timer - 1
+		self.amount = self.amount - 10 -- Тает по 10 единиц в секунду
+
+		if self.amount <= 0 then
+			go.delete()
+		end
+	end
+end
