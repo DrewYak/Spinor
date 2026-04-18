@@ -94,3 +94,11 @@ embedded_instances {
     y: 640.0
   }
 }
+embedded_instances {
+  id: "interface"
+  data: "components {\n"
+  "  id: \"ui\"\n"
+  "  component: \"/main/ui.gui\"\n"
+  "}\n"
+  ""
+}

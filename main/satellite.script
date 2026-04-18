@@ -3,6 +3,14 @@ local C = require "main.constants"
 -- Скорость тоже можно вынести в константы, но пока оставим тут как настройку скрипта
 local SPEED = 3
 
+local function update_ui_display(self)
+	msg.post("/interface#ui", "update_ui", {
+		lives = self.lives,
+		tank_a = self.energy_tank_a,
+		tank_b = self.energy_tank_b
+	})
+end
+
 function init(self)
 	msg.post(".", "acquire_input_focus")
 
@@ -16,6 +24,8 @@ function init(self)
 	self.shields = 0
 
 	self.timer = 0
+
+	update_ui_display(self)
 end
 
 function update(self, dt)
@@ -47,6 +57,7 @@ function update(self, dt)
 
 		-- Вывод состояния в консоль
 		print(string.format("Tank A: %d | Tank B: %d", self.energy_tank_a, self.energy_tank_b))
+		update_ui_display(self)
 	end
 end
 
@@ -115,5 +126,5 @@ function on_message(self, message_id, message, sender)
 		end
 	end
 
-	
+	update_ui_display(self)
 end

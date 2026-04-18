@@ -1,0 +1,55 @@
+script: "/main/ui.gui_script"
+fonts {
+  name: "system_font"
+  font: "/main/system_font.font"
+}
+nodes {
+  position {
+    x: 50.0
+    y: 1200.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "LIVES: 3"
+  font: "system_font"
+  id: "lives_label"
+  pivot: PIVOT_NW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 680.0
+    y: 1200.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "TANK A: 0"
+  font: "system_font"
+  id: "tank_a_label"
+  pivot: PIVOT_NE
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 680.0
+    y: 1150.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "TANK B: 0"
+  font: "system_font"
+  id: "tank_b_label"
+  pivot: PIVOT_NE
+  inherit_alpha: true
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

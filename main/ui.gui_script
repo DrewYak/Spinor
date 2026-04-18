@@ -1,0 +1,11 @@
+function on_message(self, message_id, message, sender)
+	if message_id == hash("update_ui") then
+		-- Обновляем текст жизней
+		local lives_text = "LIVES: " .. message.lives
+		gui.set_text(gui.get_node("lives_label"), lives_text)
+
+		-- Обновляем баки
+		gui.set_text(gui.get_node("tank_a_label"), "TANK A: " .. math.floor(message.tank_a))
+		gui.set_text(gui.get_node("tank_b_label"), "TANK B: " .. math.floor(message.tank_b))
+	end
+end
