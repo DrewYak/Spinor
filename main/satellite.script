@@ -61,24 +61,35 @@ function on_input(self, action_id, action)
 end
 
 function on_message(self, message_id, message, sender)
-	-- Проверяем, что столкнулись именно с триггером
-	if message_id == hash("trigger_response") then
-		-- Если мы вошли в зону контакта (enter == true)
-		if message.enter then
-			-- Узнаем, что это за объект по его группе
-			-- message.other_group — это группа объекта, в который мы врезались
+	if message_id == hash("add_energy") then
+		local incoming_energy = message.amount
 
-			if message.other_group == hash("energy") then
-				-- 1. Запрашиваем количество энергии у капсулы
-				-- Мы пока не реализовали передачу данных, поэтому просто 
-				-- пошлем сообщение капсуле: "умри, я тебя съел"
-				msg.post(message.other_id, "collect")
+		-- Считаем, сколько места осталось в Баке А (до 300)
+		local space_in_a = 300 - self.energy_tank_a
 
-				-- Временно добавим фиксированное число, 
-				-- пока не настроим получение точного amount
-				self.energy_tank_b = self.energy_tank_b + 500
-				print("Energy collected! Tank B: " .. self.energy_tank_b)
+		if space_in_a > 0 then
+			-- Сколько из пришедшей энергии пойдет в Бак А
+			local to_tank_a = math.min(incoming_energy, space_in_a)
+			self.energy_tank_a = self.energy_tank_a + to_tank_a
+
+			-- Остаток (если есть) идет в Бак Б
+			local to_tank_b = incoming_energy - to_tank_a
+			if to_tank_b > 0 then
+				self.energy_tank_b = self.energy_tank_b + to_tank_b
 			end
+		else
+			-- Бак А уже полон, всё в Бак Б
+			self.energy_tank_b = self.energy_tank_b + incoming_energy
+		end
+
+		print(string.format("Collected: %d | Tank A: %d | Tank B: %d", 
+		incoming_energy, self.energy_tank_a, self.energy_tank_b))
+
+		-- Проверка на создание дрона (каждые 1000 ед.)
+		if self.energy_tank_b >= 1000 then
+			-- Здесь позже будет вызов функции создания дрона
+			-- self.energy_tank_b = self.energy_tank_b - 1000
+			print("READY TO BUILD DRONE!")
 		end
 	end
 end

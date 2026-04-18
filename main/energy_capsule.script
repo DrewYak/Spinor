@@ -36,7 +36,14 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("collect") then
-		go.delete()
+	-- Если капсула коснулась чего-то
+	if message_id == hash("trigger_response") then
+		-- Если это спутник (проверяем группу) и мы входим в контакт
+		if message.other_group == hash("satellite") and message.enter then
+			-- Отправляем спутнику сообщение с накопленной энергией
+			msg.post(message.other_id, "add_energy", { amount = self.amount })
+			-- Удаляем капсулу
+			go.delete()
+		end
 	end
 end
