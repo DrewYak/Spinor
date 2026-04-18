@@ -7,4 +7,18 @@ images {
 images {
   image: "/assets/energy_capsule.png"
 }
+animations {
+  id: "asteroids"
+  images {
+    image: "/assets/a01.png"
+  }
+  images {
+    image: "/assets/a02.png"
+  }
+  images {
+    image: "/assets/a03.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 0
+}
 extrude_borders: 2

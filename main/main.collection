@@ -81,6 +81,12 @@ embedded_instances {
   "  data: \"prototype: \\\"/main/energy_capsule.go\\\"\\n"
   "\"\n"
   "}\n"
+  "embedded_components {\n"
+  "  id: \"asteroid_factory\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/main/asteroid.go\\\"\\n"
+  "\"\n"
+  "}\n"
   ""
   position {
     x: 360.0

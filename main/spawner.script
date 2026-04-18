@@ -1,21 +1,24 @@
 local C = require "main.constants"
 
 function init(self)
-	-- Функция для установки случайного времени до следующего спавна
-	self.spawn_timer = math.random(C.SPAWN_MIN, C.SPAWN_MAX)
-	print("Next capsule in: " .. self.spawn_timer .. " seconds")
+	-- Таймеры для разных объектов
+	self.capsule_timer = math.random(5, 15)
+	self.asteroid_timer = math.random(2, 5)
 end
 
 function update(self, dt)
-	self.spawn_timer = self.spawn_timer - dt
+	-- Логика для капсул энергии
+	self.capsule_timer = self.capsule_timer - dt
+	if self.capsule_timer <= 0 then
+		factory.create("#factory") -- твоя старая фабрика для капсул
+		self.capsule_timer = math.random(5, 15)
+	end
 
-	if self.spawn_timer <= 0 then
-		-- 1. Создаем капсулу
-		-- Мы вызываем фабрику, которая находится на этом же объекте
-		factory.create("#factory")
-
-		-- 2. Сбрасываем таймер на новое случайное значение
-		self.spawn_timer = math.random(C.SPAWN_MIN, C.SPAWN_MAX)
-		print("Capsule spawned! Next in: " .. self.spawn_timer .. "s")
+	-- Логика для астероидов
+	self.asteroid_timer = self.asteroid_timer - dt
+	if self.asteroid_timer <= 0 then
+		-- ОБРАТИ ВНИМАНИЕ: здесь ID должен совпадать с тем, что ты указал в Step 2
+		factory.create("#asteroid_factory") 
+		self.asteroid_timer = math.random(2, 5)
 	end
 end
