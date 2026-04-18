@@ -1,22 +1,50 @@
 local SPEED = 3
 
 function init(self)
-	-- Разрешаем объекту получать сигналы ввода
 	msg.post(".", "acquire_input_focus")
 
 	self.center = vmath.vector3(360, 640, 0)
 	self.angle = 0
 	self.radius = 200
-	self.direction = 1 -- 1 (по часовой), -1 (против)
+	self.direction = 1
+
+	-- НОВАЯ ЛОГИКА ЭНЕРГИИ И СОСТОЯНИЯ
+	self.energy_tank_a = 20      -- Бак А: Жизнеобеспечение (Max 300)
+	self.energy_tank_b = 0       -- Бак Б: Строительство дронов
+	self.lives = 3              -- Жизни
+	self.shields = 0            -- Слои щита
+
+	self.timer = 0              -- Внутренний счетчик для отсчета секунды
 end
 
 function update(self, dt)
-	-- Умножаем скорость на направление
+	-- 1. Движение спутника (уже знакомо)
 	self.angle = self.angle + SPEED * dt * self.direction
-
 	local x = self.center.x + math.cos(self.angle) * self.radius
 	local y = self.center.y + math.sin(self.angle) * self.radius
 	go.set_position(vmath.vector3(x, y, 0))
+
+	-- 2. Логика расхода энергии
+	self.timer = self.timer + dt
+	if self.timer >= 1 then
+		self.timer = self.timer - 1
+		self.energy_tank_a = self.energy_tank_a - 1
+
+		-- Если Бак А пуст, заправляем из Бака Б
+		if self.energy_tank_a <= 0 then
+			if self.energy_tank_b > 0 then
+				local refill = math.min(self.energy_tank_b, 300)
+				self.energy_tank_b = self.energy_tank_b - refill
+				self.energy_tank_a = self.energy_tank_a + refill
+				print("Refilled Tank A from Tank B!")
+			else
+				print("CRITICAL: All tanks empty!")
+			end
+		end
+
+		-- Вывод в консоль
+		print(string.format("Tank A: %d | Tank B: %d", self.energy_tank_a, self.energy_tank_b))
+	end
 end
 
 function on_input(self, action_id, action)
