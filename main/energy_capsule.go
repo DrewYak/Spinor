@@ -12,6 +12,10 @@ embedded_components {
   "  texture: \"/assets/game.atlas\"\n"
   "}\n"
   ""
+  scale {
+    x: 0.08
+    y: 0.08
+  }
 }
 embedded_components {
   id: "collisionobject"
@@ -24,15 +28,17 @@ embedded_components {
   "mask: \"satellite\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
-  "    shape_type: TYPE_SPHERE\n"
+  "    shape_type: TYPE_BOX\n"
   "    position {\n"
   "    }\n"
   "    rotation {\n"
   "    }\n"
   "    index: 0\n"
-  "    count: 1\n"
+  "    count: 3\n"
   "  }\n"
-  "  data: 30.0\n"
+  "  data: 8.948364\n"
+  "  data: 35.22254\n"
+  "  data: 10.0\n"
   "}\n"
   ""
 }
