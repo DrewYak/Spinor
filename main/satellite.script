@@ -88,4 +88,32 @@ function on_message(self, message_id, message, sender)
 			print("READY TO BUILD DRONE!")
 		end
 	end
+
+	if message_id == hash("trigger_response") then
+		if message.enter and message.other_group == hash("asteroid") then
+			-- 1. Логика урона
+			if self.shields > 0 then
+				self.shields = self.shields - 1
+				print("Shield hit! Shields left: " .. self.shields)
+			else
+				self.lives = self.lives - 1
+				print("Satellite hit! Lives left: " .. self.lives)
+
+				if self.lives <= 0 then
+					print("GAME OVER: Satellite destroyed!")
+					-- Позже добавим взрыв
+				end
+			end
+
+			-- 2. Визуальный фидбек (мигание красным)
+			-- Красим спрайт в красный и возвращаем обратно через 0.1 сек
+			go.set("#sprite", "tint", vmath.vector4(2, 0, 0, 1)) 
+			go.animate("#sprite", "tint", go.PLAYBACK_ONCE_FORWARD, vmath.vector4(1, 1, 1, 1), go.EASING_INOUTQUAD, 0.2)
+
+			-- 3. Удаляем астероид, который в нас врезался
+			msg.post(message.other_id, "explode")
+		end
+	end
+
+	
 end

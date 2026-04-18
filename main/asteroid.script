@@ -22,38 +22,44 @@ function init(self)
 	local start_pos = vmath.vector3(
 	C.CENTER.x + math.cos(angle) * spawn_distance,
 	C.CENTER.y + math.sin(angle) * spawn_distance,
-	0
-)
-go.set_position(start_pos)
+	0)
+	go.set_position(start_pos)
 
--- 4. Вектор движения
-local target_pos = vmath.vector3(
-C.CENTER.x + math.random(-200, 200),
-C.CENTER.y + math.random(-200, 200),
-0
-)
-self.velocity = vmath.normalize(target_pos - start_pos)
-self.speed = math.random(100, 250)
-self.rot_speed = math.random(-200, 200) / 100
+	-- 4. Вектор движения
+	local target_pos = vmath.vector3(
+	C.CENTER.x + math.random(-200, 200),
+	C.CENTER.y + math.random(-200, 200),
+	0)
+	
+	self.velocity = vmath.normalize(target_pos - start_pos)
+	self.speed = math.random(100, 250)
+	self.rot_speed = math.random(-200, 200) / 100
 end
 
 function update(self, dt)
-local pos = go.get_position()
-pos = pos + self.velocity * self.speed * dt
-go.set_position(pos)
+	local pos = go.get_position()
+	pos = pos + self.velocity * self.speed * dt
+	go.set_position(pos)
 
--- Вращение
-go.set_rotation(go.get_rotation() * vmath.quat_rotation_z(self.rot_speed * dt))
+	-- Вращение
+	go.set_rotation(go.get_rotation() * vmath.quat_rotation_z(self.rot_speed * dt))
 
--- Удаление, если улетел далеко
-local dist = vmath.length(pos - C.CENTER)
-if dist > 1200 then
-go.delete()
+	-- Удаление, если улетел далеко
+	local dist = vmath.length(pos - C.CENTER)
+	if dist > 1200 then
+	go.delete()
+	end
+
+	-- Проверка столкновения с планетой (если радиус планеты ~80)
+	if dist < 80 then
+	print("PLANET HIT!")
+	go.delete()
+	end
 end
 
--- Проверка столкновения с планетой (если радиус планеты ~100)
-if dist < 100 then
-print("PLANET HIT!")
-go.delete()
-end
+function on_message(self, message_id, message, sender)
+	if message_id == hash("explode") then
+		-- В будущем здесь будет вызов эффекта взрыва
+		go.delete()
+	end
 end
