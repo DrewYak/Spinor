@@ -34,3 +34,9 @@ function update(self, dt)
 		end
 	end
 end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("collect") then
+		go.delete()
+	end
+end

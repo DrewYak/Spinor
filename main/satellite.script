@@ -10,7 +10,7 @@ function init(self)
 	self.direction = 1
 
 	-- Использование единообразных названий баков
-	self.energy_tank_a = 60      -- Бак А: Жизнеобеспечение (Max 300)
+	self.energy_tank_a = 10      -- Бак А: Жизнеобеспечение (Max 300)
 	self.energy_tank_b = 0       -- Бак Б: Строительство дронов
 	self.lives = 3
 	self.shields = 0
@@ -57,5 +57,28 @@ function on_input(self, action_id, action)
 		-- ВРЕМЕННО: Создаем капсулу в центре для теста
 		-- Фабрика сама создаст объект в C.CENTER, если он там стоит в коллекции
 		factory.create("/spawner#factory")
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	-- Проверяем, что столкнулись именно с триггером
+	if message_id == hash("trigger_response") then
+		-- Если мы вошли в зону контакта (enter == true)
+		if message.enter then
+			-- Узнаем, что это за объект по его группе
+			-- message.other_group — это группа объекта, в который мы врезались
+
+			if message.other_group == hash("energy") then
+				-- 1. Запрашиваем количество энергии у капсулы
+				-- Мы пока не реализовали передачу данных, поэтому просто 
+				-- пошлем сообщение капсуле: "умри, я тебя съел"
+				msg.post(message.other_id, "collect")
+
+				-- Временно добавим фиксированное число, 
+				-- пока не настроим получение точного amount
+				self.energy_tank_b = self.energy_tank_b + 500
+				print("Energy collected! Tank B: " .. self.energy_tank_b)
+			end
+		end
 	end
 end
