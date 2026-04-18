@@ -1,0 +1,27 @@
+local SPEED = 3
+
+function init(self)
+	-- Разрешаем объекту получать сигналы ввода
+	msg.post(".", "acquire_input_focus")
+
+	self.center = vmath.vector3(360, 640, 0)
+	self.angle = 0
+	self.radius = 200
+	self.direction = 1 -- 1 (по часовой), -1 (против)
+end
+
+function update(self, dt)
+	-- Умножаем скорость на направление
+	self.angle = self.angle + SPEED * dt * self.direction
+
+	local x = self.center.x + math.cos(self.angle) * self.radius
+	local y = self.center.y + math.sin(self.angle) * self.radius
+	go.set_position(vmath.vector3(x, y, 0))
+end
+
+function on_input(self, action_id, action)
+	-- Если нажали "touch" (клик или пробел)
+	if action_id == hash("touch") and action.pressed then
+		self.direction = self.direction * -1
+	end
+end
