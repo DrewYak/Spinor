@@ -7,6 +7,9 @@ images {
 images {
   image: "/assets/energy_capsule.png"
 }
+images {
+  image: "/assets/background.png"
+}
 animations {
   id: "asteroids"
   images {

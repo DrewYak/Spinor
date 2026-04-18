@@ -12,6 +12,10 @@ embedded_instances {
   "  texture: \\\"/assets/game.atlas\\\"\\n"
   "}\\n"
   "\"\n"
+  "  scale {\n"
+  "    x: 0.25\n"
+  "    y: 0.25\n"
+  "  }\n"
   "}\n"
   ""
   position {
@@ -69,6 +73,10 @@ embedded_instances {
     x: 560.0
     y: 640.0
   }
+  scale3 {
+    x: 0.9
+    y: 0.9
+  }
 }
 embedded_instances {
   id: "spawner"
@@ -101,4 +109,24 @@ embedded_instances {
   "  component: \"/main/ui.gui\"\n"
   "}\n"
   ""
+}
+embedded_instances {
+  id: "background"
+  data: "embedded_components {\n"
+  "  id: \"sprite\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"default_animation: \\\"background\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "textures {\\n"
+  "  sampler: \\\"texture_sampler\\\"\\n"
+  "  texture: \\\"/assets/game.atlas\\\"\\n"
+  "}\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    x: 360.0
+    y: 640.0
+    z: -0.5
+  }
 }

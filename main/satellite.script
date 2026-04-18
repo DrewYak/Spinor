@@ -31,6 +31,7 @@ function update(self, dt)
 	local x = C.CENTER.x + math.cos(self.angle) * C.ORBIT_RADIUS
 	local y = C.CENTER.y + math.sin(self.angle) * C.ORBIT_RADIUS
 	go.set_position(vmath.vector3(x, y, 0))
+	go.set_rotation(vmath.quat_rotation_z(self.angle + math.pi/2 * (self.direction - 1)))
 
 	-- 2. Логика расхода энергии
 	self.timer = self.timer + dt
